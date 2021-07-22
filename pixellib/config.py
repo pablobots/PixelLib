@@ -104,7 +104,7 @@ class Config(object):
     # enough positive proposals to fill this and keep a positive:negative
     # ratio of 1:3. You can increase the number of proposals by adjusting
     # the RPN NMS threshold.
-    TRAIN_ROIS_PER_IMAGE = 350
+    #TRAIN_ROIS_PER_IMAGE = 200
 
     # Percent of positive ROIs used to train classifier/mask heads
     ROI_POSITIVE_RATIO = 0.33
@@ -125,24 +125,24 @@ class Config(object):
     BBOX_STD_DEV = np.array([0.1, 0.1, 0.2, 0.2])
 
     # Max number of final detections
-    DETECTION_MAX_INSTANCES = 600
+    # DETECTION_MAX_INSTANCES = 100
 
     # Minimum probability value to accept a detected instance
     # ROIs below this threshold are skipped
     #DETECTION_MIN_CONFIDENCE = 0.7
 
     # Non-maximum suppression threshold for detection
-    DETECTION_NMS_THRESHOLD = 0.15
+    #DETECTION_NMS_THRESHOLD = 0.3
 
     # Learning rate and momentum
     # The Mask RCNN paper uses lr=0.02, but on TensorFlow it causes
     # weights to explode. Likely due to differences in optimizer
     # implementation.
     LEARNING_RATE = 0.001
-    LEARNING_MOMENTUM = 0.95
+    LEARNING_MOMENTUM = 0.9
 
     # Weight decay regularization
-    WEIGHT_DECAY = 0.0005
+    WEIGHT_DECAY = 0.0001
 
     # Loss weights for more precise optimization.
     # Can be used for R-CNN training setup.
@@ -170,8 +170,12 @@ class Config(object):
     # Gradient norm clipping
     GRADIENT_CLIP_NORM = 5.0
 
-    def __init__(self, BACKBONE,  NUM_CLASSES , class_names, IMAGES_PER_GPU, IMAGE_MAX_DIM, IMAGE_MIN_DIM, DETECTION_MIN_CONFIDENCE, IMAGE_RESIZE_MODE,GPU_COUNT):
+    def __init__(self, BACKBONE,  NUM_CLASSES , class_names, IMAGES_PER_GPU, IMAGE_MAX_DIM, IMAGE_MIN_DIM, DETECTION_MIN_CONFIDENCE, IMAGE_RESIZE_MODE,GPU_COUNT,
+        DETECTION_NMS_THRESHOLD, TRAIN_ROIS_PER_IMAGE, DETECTION_MAX_INSTANCES):
         self.GPU_COUNT = GPU_COUNT
+        self.TRAIN_ROIS_PER_IMAGE = TRAIN_ROIS_PER_IMAGE
+        self.DETECTION_NMS_THRESHOLD = DETECTION_NMS_THRESHOLD
+        self.DETECTION_MAX_INSTANCES = DETECTION_MAX_INSTANCES
         self.IMAGES_PER_GPU = IMAGES_PER_GPU
         self.NUM_CLASSES = NUM_CLASSES
         self.class_names = class_names

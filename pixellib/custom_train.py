@@ -8,7 +8,7 @@ from numpy import zeros
 import random
 import cv2
 import time
-import tensorflow 
+import tensorflow
 from pixellib.utils import Dataset
 from pixellib.utils import compute_ap
 from pixellib.mask_rcnn import mold_image
@@ -35,11 +35,13 @@ class instance_custom_training:
     def __init__(self):
         self.model_dir = os.getcwd()
 
-        
-    def modelConfig(self,network_backbone = "resnet101",  num_classes =  1,  class_names = ["BG"], batch_size = 1, detection_threshold = 0.7, image_max_dim = 512, image_min_dim = 512, image_resize_mode ="square", gpu_count = 1):
-        self.config = Config(BACKBONE = network_backbone, NUM_CLASSES = 1 +  num_classes,  class_names = class_names, 
-       IMAGES_PER_GPU = batch_size, IMAGE_MAX_DIM = image_max_dim, IMAGE_MIN_DIM = image_min_dim, DETECTION_MIN_CONFIDENCE = detection_threshold,
-       IMAGE_RESIZE_MODE = image_resize_mode,GPU_COUNT = gpu_count)
+
+    def modelConfig(self,network_backbone = "resnet101",  num_classes =  1,  class_names = ["BG"], batch_size = 1, detection_threshold = 0.7, image_max_dim = 512, image_min_dim = 512, image_resize_mode ="square", gpu_count = 1,
+        detection_nms_threshold = 0.45, train_rois_per_image = 256, detection_max_instances = 500):
+        self.config = Config(BACKBONE = network_backbone, NUM_CLASSES = 1 +  num_classes,  class_names = class_names,
+        IMAGES_PER_GPU = batch_size, IMAGE_MAX_DIM = image_max_dim, IMAGE_MIN_DIM = image_min_dim, DETECTION_MIN_CONFIDENCE = detection_threshold,
+        IMAGE_RESIZE_MODE = image_resize_mode,GPU_COUNT = gpu_count, DETECTION_NMS_THRESHOLD = detection_nms_threshold, TRAIN_ROIS_PER_IMAGE = train_rois_per_image,
+        DETECTION_MAX_INSTANCES = detection_max_instances)
 
         if network_backbone == "resnet101":
             print("Using resnet101 as network backbone For Mask R-CNN model")
@@ -49,39 +51,39 @@ class instance_custom_training:
     def load_pretrained_model(self, model_path):
         #load the weights for COCO
         self.model = modellib.MaskRCNN(mode="training", model_dir = self.model_dir, config = self.config)
-        self.model.load_weights(model_path, by_name=True, exclude=["mrcnn_class_logits", "mrcnn_bbox_fc",  "mrcnn_bbox", 
+        self.model.load_weights(model_path, by_name=True, exclude=["mrcnn_class_logits", "mrcnn_bbox_fc",  "mrcnn_bbox",
         "mrcnn_mask"])
-    
-    
+
+
     def load_dataset(self, dataset):
         labelme_folder1 = os.path.abspath(os.path.join(dataset, "train"))
 
         #dir where the converted json files will be saved
         save_json_path1 = os.path.abspath(os.path.join(dataset, "train.json"))
-        
-        #conversion of individual labelme json files into a single json file        
+
+        #conversion of individual labelme json files into a single json file
         labelme2coco.convert(labelme_folder1, save_json_path1)
-        
+
         # Training dataset.
         self.dataset_train = Data()
         self.dataset_train.load_data(save_json_path1, labelme_folder1)
         self.dataset_train.prepare()
-        
-        
+
+
         labelme_folder2 = os.path.abspath(os.path.join(dataset, "test"))
 
         #dir where the converted json files will be saved
         save_json_path2 = os.path.abspath(os.path.join(dataset, "test.json"))
-        
-        
-        #conversion of individual labelme json files into a single json file  
+
+
+        #conversion of individual labelme json files into a single json file
         labelme2coco.convert(labelme_folder2, save_json_path2)
-        
+
         # Training dataset.
         self.dataset_test = Data()
         self.dataset_test.load_data(save_json_path2, labelme_folder2)
         self.dataset_test.prepare()
-    
+
 
     def visualize_sample(self):
         image_id = np.random.choice(self.dataset_train.image_ids)
@@ -92,13 +94,13 @@ class instance_custom_training:
 
 
         # Display image and instances
-        out = display_box_instances(image, bbox, mask, class_ids, self.dataset_train.class_names)  
+        out = display_box_instances(image, bbox, mask, class_ids, self.dataset_train.class_names)
         plt.imshow(out)
         plt.axis("off")
         plt.show()
-            
 
-        
+
+
 
     def train_model(self, num_epochs, path_trained_models,  layers = "all", augmentation = False):
         if augmentation == False:
@@ -115,20 +117,20 @@ class instance_custom_training:
 
             else:
                 augmentation = augmentation
-                print("Applying Custom Augmentation on Dataset")   
+                print("Applying Custom Augmentation on Dataset")
 
         print('Train %d' % len(self.dataset_train.image_ids), "images")
         print('Validate %d' % len(self.dataset_test.image_ids), "images")
 
-        self.model.train(self.dataset_train, self.dataset_test,models = path_trained_models, augmentation = augmentation, 
+        self.model.train(self.dataset_train, self.dataset_test,models = path_trained_models, augmentation = augmentation,
         epochs=num_epochs,layers=layers)
-                             
-        
+
+
     def evaluate_model(self, model_path, iou_threshold = 0.5):
-        self.model = MaskRCNN(mode = "inference", model_dir = os.getcwd(), config = self.config)  
+        self.model = MaskRCNN(mode = "inference", model_dir = os.getcwd(), config = self.config)
         if os.path.isfile(model_path):
             model_files = [model_path]
-             
+
         if os.path.isdir(model_path):
             model_files = sorted([os.path.join(model_path, file_name) for file_name in os.listdir(model_path)])
         for modelfile in model_files:
@@ -136,7 +138,7 @@ class instance_custom_training:
                 self.model.load_weights(modelfile, by_name=True)
             APs = []
             #outputs = list()
-            for image_id in self.dataset_test.image_ids:                                                                                                                                                                                                                                                                                                                                                                             
+            for image_id in self.dataset_test.image_ids:
                 # load image, bounding boxes and masks for the image id
                 image, image_meta, gt_class_id, gt_bbox, gt_mask = load_image_gt(self.dataset_test, self.config, image_id)
                 # convert pixel values (e.g. center)
@@ -156,8 +158,8 @@ class instance_custom_training:
             mAP = np.mean(APs)
             print(modelfile, "evaluation using iou_threshold", iou_threshold, "is", f"{mAP:01f}", '\n')
 
-                    
-        
+
+
 
 ############################################################
 #  Dataset
@@ -169,7 +171,7 @@ class Data(Dataset):
 
 
     def load_data(self,  annotation_json, images_path):
-       
+
         # Load json from file
         json_file = open(annotation_json)
         coco_json = json.load(json_file)
@@ -223,7 +225,7 @@ class Data(Dataset):
                     annotations=image_annotations
                 )
 
-    
+
 
     def load_mask(self, image_id):
         """ Load instance masks for the given image.
@@ -253,7 +255,7 @@ class Data(Dataset):
         mask = np.dstack(instance_masks)
         class_ids = np.array(class_ids, dtype=np.int32)
 
-        return mask, class_ids    
+        return mask, class_ids
 
 
 
@@ -281,11 +283,11 @@ def apply_mask(image, mask, color, alpha=0.5):
     return image
 
 
-    
+
 
 
 def display_instances(image, boxes, masks, class_ids,  class_name):
-    
+
     n_instances = boxes.shape[0]
     colors = random_colors(n_instances)
 
@@ -307,7 +309,7 @@ def display_instances(image, boxes, masks, class_ids,  class_name):
 
 
 def display_box_instances(image, boxes, masks, class_ids, class_name, scores = None):
-    
+
     n_instances = boxes.shape[0]
     colors = random_colors(n_instances)
 
