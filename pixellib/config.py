@@ -15,13 +15,13 @@ import numpy as np
 # the configurations you need to change.
 
 class Config(object):
-    
+
     """Base configuration class. For custom configurations, create a
     sub-class that inherits from this one and override properties
     that need to be changed.
     """
     NAME = None
-   
+
     # Number of training steps per epoch
     # This doesn't need to match the size of the training set. Tensorboard
     # updates are saved at the end of each epoch, so setting this to a
@@ -36,7 +36,7 @@ class Config(object):
     # down the training.
     VALIDATION_STEPS = 50
 
-    
+
 
     # Only useful if you supply a callable to BACKBONE. Should compute
     # the shape of each layer of the FPN Pyramid.
@@ -68,12 +68,12 @@ class Config(object):
 
     # Non-max suppression threshold to filter RPN proposals.
     # You can increase this during training to generate more propsals.
-    RPN_NMS_THRESHOLD = 0.7
-    
+    RPN_NMS_THRESHOLD = 0.8
+
 
     # How many anchors per image to use for RPN training
     RPN_TRAIN_ANCHORS_PER_IMAGE = 256
-    
+
     # ROIs kept after tf.nn.top_k and before non-maximum suppression
     PRE_NMS_LIMIT = 6000
 
@@ -95,7 +95,7 @@ class Config(object):
     # Changing this requires other changes in the code. See the WIKI for more
     # details: https://github.com/matterport/Mask_RCNN/wiki
     IMAGE_CHANNEL_COUNT = 3
-    
+
     # Image mean (RGB)
     MEAN_PIXEL = np.array([123.7, 116.8, 103.9])
 
@@ -104,8 +104,8 @@ class Config(object):
     # enough positive proposals to fill this and keep a positive:negative
     # ratio of 1:3. You can increase the number of proposals by adjusting
     # the RPN NMS threshold.
-    TRAIN_ROIS_PER_IMAGE = 200
-    
+    TRAIN_ROIS_PER_IMAGE = 350
+
     # Percent of positive ROIs used to train classifier/mask heads
     ROI_POSITIVE_RATIO = 0.33
 
@@ -125,24 +125,24 @@ class Config(object):
     BBOX_STD_DEV = np.array([0.1, 0.1, 0.2, 0.2])
 
     # Max number of final detections
-    DETECTION_MAX_INSTANCES = 100
+    DETECTION_MAX_INSTANCES = 600
 
     # Minimum probability value to accept a detected instance
     # ROIs below this threshold are skipped
     #DETECTION_MIN_CONFIDENCE = 0.7
 
     # Non-maximum suppression threshold for detection
-    DETECTION_NMS_THRESHOLD = 0.3
+    DETECTION_NMS_THRESHOLD = 0.15
 
     # Learning rate and momentum
     # The Mask RCNN paper uses lr=0.02, but on TensorFlow it causes
     # weights to explode. Likely due to differences in optimizer
     # implementation.
     LEARNING_RATE = 0.001
-    LEARNING_MOMENTUM = 0.9
+    LEARNING_MOMENTUM = 0.95
 
     # Weight decay regularization
-    WEIGHT_DECAY = 0.0001
+    WEIGHT_DECAY = 0.0005
 
     # Loss weights for more precise optimization.
     # Can be used for R-CNN training setup.
@@ -178,7 +178,7 @@ class Config(object):
         self.IMAGE_MAX_DIM = IMAGE_MAX_DIM
         self.IMAGE_MIN_DIM = IMAGE_MIN_DIM
         self.DETECTION_MIN_CONFIDENCE = DETECTION_MIN_CONFIDENCE
-        
+
         # Backbone network architecture
         # Supported values are: resnet50, resnet101.
         # You can also provide a callable that should have the signature
@@ -206,9 +206,9 @@ class Config(object):
         #         size IMAGE_MIN_DIM x IMAGE_MIN_DIM. Can be used in training only.
         #         IMAGE_MAX_DIM is not used in this mode.
         self.IMAGE_RESIZE_MODE = IMAGE_RESIZE_MODE
-        
+
         """Set values of computed attributes."""
-        # Effective batch size 
+        # Effective batch size
         self.BATCH_SIZE = self.IMAGES_PER_GPU * self.GPU_COUNT
 
         # Input image size
@@ -234,5 +234,5 @@ class Config(object):
         for key, val in self.to_dict().items():
             print(f"{key:30} {val}")
         print("\n")
-    
+
 

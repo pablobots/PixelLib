@@ -1,1 +1,41 @@
-.vs/
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# Image or video #
+######################
+*.jpg
+*.png
+*.jpeg
+*.mp4
+*.mov
+*.out
+
+# Neural network weights #
+######################
+*.pt
+*.h5

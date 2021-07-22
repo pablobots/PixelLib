@@ -1073,7 +1073,7 @@ def rpn_bbox_loss_graph(config, target_bbox, rpn_match, rpn_bbox):
                                    config.IMAGES_PER_GPU)
 
     loss = smooth_l1_loss(target_bbox, rpn_bbox)
-    
+
     loss = K.switch(tf.size(input=loss) > 0, K.mean(loss), tf.constant(0.0))
     return loss
 
@@ -1785,7 +1785,7 @@ class DataGenerator(KU.Sequence):
         return inputs, outputs
 
 
-   
+
 ############################################################
 #  MaskRCNN Class
 ############################################################
@@ -1802,7 +1802,7 @@ class custom_layer(tf.keras.layers.Layer):
         return config
 
 
-  
+
 class MaskRCNN(object):
     """Encapsulates the Mask RCNN model functionality.
     The actual Keras model is in the keras_model property.
@@ -1820,8 +1820,8 @@ class MaskRCNN(object):
         self.model_dir = model_dir
         self.set_log_dir()
         self.keras_model = self.build(mode=mode, config=config)
-        self.lr = self.config.LEARNING_RATE 
-       
+        self.lr = self.config.LEARNING_RATE
+
 
     def build(self, mode, config):
         """Build Mask R-CNN architecture.
@@ -2115,12 +2115,12 @@ class MaskRCNN(object):
         # Update the log directory
         self.set_log_dir(filepath)
 
-    
+
 
     def lr_scheduler(self, epoch):
         if(epoch > 0 and epoch % 50 == 0):
             self.lr = self.lr/10
-        #print("Learning Rate", self.lr) 
+        #print("Learning Rate", self.lr)
         return self.lr
 
     def compile(self):
@@ -2128,10 +2128,10 @@ class MaskRCNN(object):
         metrics. Then calls the Keras compile() function.
         """
         # Optimizer object
-        optimizer = keras.optimizers.SGD(self.lr_scheduler(0), momentum = self.config.LEARNING_MOMENTUM, 
+        optimizer = keras.optimizers.SGD(self.lr_scheduler(0), momentum = self.config.LEARNING_MOMENTUM,
         clipnorm = self.config.GRADIENT_CLIP_NORM)
-    
-               
+
+
         # Add Losses
         loss_names = [
             "rpn_class_loss",  "rpn_bbox_loss",
@@ -2219,7 +2219,7 @@ class MaskRCNN(object):
 
         # If we have a model path with date and epochs use them
         self.model_name = 'mask_rcnn_model.{epoch:03d}-{val_loss:01f}.h5'
-        
+
     def train(self, train_dataset, val_dataset, epochs,layers,models,
                 augmentation=False, no_augmentation_sources=None):
         """Train the model.
@@ -2254,8 +2254,8 @@ class MaskRCNN(object):
             defined in the Dataset class.
         """
         assert self.mode == "training", "Create model in training mode."
-        
-    
+
+
         # Pre-defined layer regular expressions
         layer_regex = {
             # all layers but the backbone
@@ -2277,23 +2277,23 @@ class MaskRCNN(object):
         lr_rate = LearningRateScheduler(self.lr_scheduler)
 
         path_models = models
- 
+
         self.save_directory = os.path.join(self.model_dir, path_models)
         if not os.path.isdir(self.save_directory):
             os.makedirs(self.save_directory)
         self.checkpoint_path = os.path.join(self.save_directory, self.model_name)
 
         callb = [
-            ModelCheckpoint(self.checkpoint_path,save_weights_only=True,save_best_only = True, monitor = "val_loss", verbose = 0), 
+            ModelCheckpoint(self.checkpoint_path,save_weights_only=True,save_best_only = True, monitor = "val_loss", verbose = 0),
             lr_rate ,
-     
-        ] 
 
-    
+        ]
+
+
         # Train
-        #log("\nStarting at epoch {}. LR={}\n".format(self.epoch, learning_rate)) 
+        #log("\nStarting at epoch {}. LR={}\n".format(self.epoch, learning_rate))
         log("Checkpoint Path: {}".format(self.save_directory))
-        
+
         self.set_trainable(layers)
         #self.compile(self.lr_scheduler(0))
         self.compile()
@@ -2304,7 +2304,7 @@ class MaskRCNN(object):
             workers = 0
         else:
             workers = multiprocessing.cpu_count()
-            
+
         self.keras_model.fit(
             train_generator,
             initial_epoch=self.epoch,
@@ -2314,9 +2314,9 @@ class MaskRCNN(object):
             validation_data=val_generator,
             validation_steps=self.config.VALIDATION_STEPS,
             max_queue_size=100,
-            workers=workers,  
+            workers=workers,
             verbose = 1
-            
+
         )
         self.epoch = max(self.epoch, epochs)
 
@@ -2459,7 +2459,7 @@ class MaskRCNN(object):
             log("molded_images", molded_images)
             log("image_metas", image_metas)
             log("anchors", anchors)
-        """    
+        """
         # Run object detection
         detections, _, _, mrcnn_mask, _, _, _ =\
             self.keras_model.predict([molded_images, image_metas, anchors], verbose=0)
@@ -2793,4 +2793,4 @@ def denorm_boxes_graph(boxes, shape):
     shift = tf.constant([0., 0., 1., 1.])
     return tf.cast(tf.round(tf.multiply(boxes, scale) + shift), tf.int32)
 
-   
+
