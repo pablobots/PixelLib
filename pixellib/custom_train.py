@@ -108,10 +108,23 @@ class instance_custom_training:
 
         else:
             if augmentation == True:
-                augmentation = imgaug.augmenters.Sometimes(0.5, [
-			        imgaug.augmenters.Fliplr(0.5),
+                augmentation = iaa.Sometimes(0.5, [
+			        iaa.Fliplr(0.5),
 			        iaa.Flipud(0.5),
-			        imgaug.augmenters.GaussianBlur(sigma=(0.0, 5.0))
+			        iaa.GaussianBlur(sigma=(0.0, 5.0)),
+                    iaa.OneOf(
+                        iaa.GammaContrast((0.5, 2.0)),
+                        iaa.SigmoidContrast(gain=(3, 10), cutoff=(0.4, 0.6)),
+                        iaa.AllChannelsCLAHE(clip_limit=(1, 10)),
+                        iaa.WithBrightnessChannels(iaa.Add((-50, 50)), to_colorspace=[iaa.CSPACE_Lab, iaa.CSPACE_HSV]),
+                        iaa.RemoveSaturation(1.0),
+                        iaa.Grayscale(alpha=(0.0, 1.0)),
+                        iaa.BlendAlphaElementwise([0.25, 0.75], iaa.MedianBlur(13)),
+                        iaa.BlendAlphaSimplexNoise(iaa.EdgeDetect(1.0)),
+                        iaa.BlendAlphaFrequencyNoise(first=iaa.EdgeDetect(1.0), upscale_method="nearest"),
+                        iaa.Canny(alpha=(0.0, 0.5)),
+                        iaa.Alpha((0.0, 1.0),iaa.Canny(alpha=1),iaa.MedianBlur(13)),
+                        )
 			        ])
                 print("Applying Default Augmentation on Dataset")
 

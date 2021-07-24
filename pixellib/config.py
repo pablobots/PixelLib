@@ -34,8 +34,7 @@ class Config(object):
     # Number of validation steps to run at the end of every training epoch.
     # A bigger number improves accuracy of validation stats, but slows
     # down the training.
-    #VALIDATION_STEPS = 50
-    VALIDATION_STEPS = 30
+    VALIDATION_STEPS = 50
 
 
 
