@@ -19,7 +19,7 @@ class configuration(Config):
 
 coco_config = configuration(BACKBONE = "resnet101",  NUM_CLASSES =  81,  class_names = ["BG"], IMAGES_PER_GPU = 1,
 DETECTION_MIN_CONFIDENCE = 0.7,IMAGE_MAX_DIM = 1024, IMAGE_MIN_DIM = 800,IMAGE_RESIZE_MODE ="square",  GPU_COUNT = 1,
-DETECTION_NMS_THRESHOLD = 0.45, TRAIN_ROIS_PER_IMAGE = 256, DETECTION_MAX_INSTANCES = 500)
+DETECTION_NMS_THRESHOLD = 0.45, TRAIN_ROIS_PER_IMAGE = 512, DETECTION_MAX_INSTANCES = 500)
 
 
 class instance_segmentation():
@@ -681,7 +681,7 @@ class custom_segmentation:
        self.model_dir = os.getcwd()
 
     def inferConfig(self,name = None, network_backbone = "resnet101",  num_classes =  1,  class_names = ["BG"], batch_size = 1, detection_threshold = 0.7,
-        image_max_dim = 512, image_min_dim = 512, image_resize_mode ="square", gpu_count = 1, detection_nms_threshold = 0.45, train_rois_per_image = 256,
+        image_max_dim = 1280, image_min_dim = 1024, image_resize_mode ="square", gpu_count = 1, detection_nms_threshold = 0.45, train_rois_per_image = 512,
         detection_max_instances = 500):
         self.config = Config(BACKBONE = network_backbone, NUM_CLASSES = 1 +  num_classes,  class_names = class_names,
         IMAGES_PER_GPU = batch_size, IMAGE_MAX_DIM = image_max_dim, IMAGE_MIN_DIM = image_min_dim, DETECTION_MIN_CONFIDENCE = detection_threshold,

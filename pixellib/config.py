@@ -34,7 +34,8 @@ class Config(object):
     # Number of validation steps to run at the end of every training epoch.
     # A bigger number improves accuracy of validation stats, but slows
     # down the training.
-    VALIDATION_STEPS = 50
+    #VALIDATION_STEPS = 50
+    VALIDATION_STEPS = 30
 
 
 
@@ -68,18 +69,23 @@ class Config(object):
 
     # Non-max suppression threshold to filter RPN proposals.
     # You can increase this during training to generate more propsals.
-    RPN_NMS_THRESHOLD = 0.8
+    #RPN_NMS_THRESHOLD = 0.8
+    RPN_NMS_THRESHOLD = 0.9
 
 
     # How many anchors per image to use for RPN training
-    RPN_TRAIN_ANCHORS_PER_IMAGE = 256
+    #RPN_TRAIN_ANCHORS_PER_IMAGE = 256
+    RPN_TRAIN_ANCHORS_PER_IMAGE = 800
 
     # ROIs kept after tf.nn.top_k and before non-maximum suppression
-    PRE_NMS_LIMIT = 6000
+    #PRE_NMS_LIMIT = 6000
+    PRE_NMS_LIMIT = 12000
 
     # ROIs kept after non-maximum suppression (training and inference)
-    POST_NMS_ROIS_TRAINING = 2000
-    POST_NMS_ROIS_INFERENCE = 1000
+    #POST_NMS_ROIS_TRAINING = 2000
+    POST_NMS_ROIS_TRAINING = 6000
+    #POST_NMS_ROIS_INFERENCE = 1000
+    POST_NMS_ROIS_INFERENCE = 8000
 
     # If enabled, resizes instance masks to a smaller size to reduce
     # memory load. Recommended when using high-resolution images.
@@ -118,7 +124,8 @@ class Config(object):
     MASK_SHAPE = [28, 28]
 
     # Maximum number of ground truth instances to use in one image
-    MAX_GT_INSTANCES = 100
+    #MAX_GT_INSTANCES = 100
+    MAX_GT_INSTANCES = 300
 
     # Bounding box refinement standard deviation for RPN and final detections.
     RPN_BBOX_STD_DEV = np.array([0.1, 0.1, 0.2, 0.2])
@@ -139,10 +146,12 @@ class Config(object):
     # weights to explode. Likely due to differences in optimizer
     # implementation.
     LEARNING_RATE = 0.001
-    LEARNING_MOMENTUM = 0.9
+    #LEARNING_MOMENTUM = 0.9
+    LEARNING_MOMENTUM = 0.95
 
     # Weight decay regularization
-    WEIGHT_DECAY = 0.0001
+    #WEIGHT_DECAY = 0.0001
+    WEIGHT_DECAY = 0.0005
 
     # Loss weights for more precise optimization.
     # Can be used for R-CNN training setup.

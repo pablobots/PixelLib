@@ -36,8 +36,8 @@ class instance_custom_training:
         self.model_dir = os.getcwd()
 
 
-    def modelConfig(self,network_backbone = "resnet101",  num_classes =  1,  class_names = ["BG"], batch_size = 1, detection_threshold = 0.7, image_max_dim = 512, image_min_dim = 512, image_resize_mode ="square", gpu_count = 1,
-        detection_nms_threshold = 0.45, train_rois_per_image = 256, detection_max_instances = 500):
+    def modelConfig(self,network_backbone = "resnet101",  num_classes =  1,  class_names = ["BG"], batch_size = 1, detection_threshold = 0.7, image_max_dim = 1280, image_min_dim = 1024, image_resize_mode ="square", gpu_count = 1,
+        detection_nms_threshold = 0.45, train_rois_per_image = 512, detection_max_instances = 500):
         self.config = Config(BACKBONE = network_backbone, NUM_CLASSES = 1 +  num_classes,  class_names = class_names,
         IMAGES_PER_GPU = batch_size, IMAGE_MAX_DIM = image_max_dim, IMAGE_MIN_DIM = image_min_dim, DETECTION_MIN_CONFIDENCE = detection_threshold,
         IMAGE_RESIZE_MODE = image_resize_mode,GPU_COUNT = gpu_count, DETECTION_NMS_THRESHOLD = detection_nms_threshold, TRAIN_ROIS_PER_IMAGE = train_rois_per_image,
