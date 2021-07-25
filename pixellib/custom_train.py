@@ -37,11 +37,11 @@ class instance_custom_training:
 
 
     def modelConfig(self,network_backbone = "resnet101",  num_classes =  1,  class_names = ["BG"], batch_size = 1, detection_threshold = 0.7, image_max_dim = 1280, image_min_dim = 1024, image_resize_mode ="square", gpu_count = 1,
-        detection_nms_threshold = 0.45, train_rois_per_image = 200, detection_max_instances = 500):
+        detection_nms_threshold = 0.45, train_rois_per_image = 200, detection_max_instances = 500, learning_rate = 0.001):
         self.config = Config(BACKBONE = network_backbone, NUM_CLASSES = 1 +  num_classes,  class_names = class_names,
         IMAGES_PER_GPU = batch_size, IMAGE_MAX_DIM = image_max_dim, IMAGE_MIN_DIM = image_min_dim, DETECTION_MIN_CONFIDENCE = detection_threshold,
         IMAGE_RESIZE_MODE = image_resize_mode,GPU_COUNT = gpu_count, DETECTION_NMS_THRESHOLD = detection_nms_threshold, TRAIN_ROIS_PER_IMAGE = train_rois_per_image,
-        DETECTION_MAX_INSTANCES = detection_max_instances)
+        DETECTION_MAX_INSTANCES = detection_max_instances, LEARNING_RATE = learning_rate)
 
         if network_backbone == "resnet101":
             print("Using resnet101 as network backbone For Mask R-CNN model")
@@ -111,9 +111,19 @@ class instance_custom_training:
                 augmentation = iaa.Sometimes(0.5, [
 			        iaa.Fliplr(0.5),
 			        iaa.Flipud(0.5),
-			        iaa.GaussianBlur(sigma=(0.0, 5.0)),
+			        #iaa.GaussianBlur(sigma=(0.0, 5.0)),
                     iaa.OneOf(
+                        iaa.GaussianBlur(sigma=(0.0, 5.0)),
+                        iaa.Affine(rotate=(-45, 45)),
+                        iaa.Affine(scale={"x": (0.5, 1.5), "y": (0.5, 1.5)}),
+                        iaa.Add((-40, 40)),
+                        iaa.AddElementwise((-40, 40)),
+                        iaa.AdditiveGaussianNoise(scale=(0, 0.2*255)),
+                        iaa.Multiply((0.5, 1.5)),
                         iaa.GammaContrast((0.5, 2.0)),
+                        iaa.Cutout(nb_iterations=(1, 3), size=0.2, squared=False),
+                        iaa.CoarseDropout((0.0, 0.05), size_percent=(0.02, 0.25)),
+                        iaa.JpegCompression(compression=(70, 99)),
                         iaa.SigmoidContrast(gain=(3, 10), cutoff=(0.4, 0.6)),
                         iaa.AllChannelsCLAHE(clip_limit=(1, 10)),
                         iaa.WithBrightnessChannels(iaa.Add((-50, 50)), to_colorspace=[iaa.CSPACE_Lab, iaa.CSPACE_HSV]),
