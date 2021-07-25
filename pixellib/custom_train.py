@@ -131,7 +131,6 @@ class instance_custom_training:
                         iaa.Grayscale(alpha=(0.0, 1.0)),
                         iaa.BlendAlphaElementwise([0.25, 0.75], iaa.MedianBlur(13)),
                         iaa.BlendAlphaSimplexNoise(iaa.EdgeDetect(1.0)),
-                        iaa.BlendAlphaFrequencyNoise(first=iaa.EdgeDetect(1.0), upscale_method="nearest"),
                         iaa.Canny(alpha=(0.0, 0.5)),
                         iaa.Alpha((0.0, 1.0),iaa.Canny(alpha=1),iaa.MedianBlur(13)),
                         )
