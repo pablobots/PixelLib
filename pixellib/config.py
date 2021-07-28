@@ -68,23 +68,23 @@ class Config(object):
 
     # Non-max suppression threshold to filter RPN proposals.
     # You can increase this during training to generate more propsals.
-    RPN_NMS_THRESHOLD = 0.8
-    #RPN_NMS_THRESHOLD = 0.9
+    #RPN_NMS_THRESHOLD = 0.8
+    RPN_NMS_THRESHOLD = 0.9
 
 
     # How many anchors per image to use for RPN training
-    RPN_TRAIN_ANCHORS_PER_IMAGE = 256
-    #RPN_TRAIN_ANCHORS_PER_IMAGE = 800
+    #RPN_TRAIN_ANCHORS_PER_IMAGE = 256
+    RPN_TRAIN_ANCHORS_PER_IMAGE = 800
 
     # ROIs kept after tf.nn.top_k and before non-maximum suppression
-    PRE_NMS_LIMIT = 6000
-    #PRE_NMS_LIMIT = 12000
+    #PRE_NMS_LIMIT = 6000
+    PRE_NMS_LIMIT = 12000
 
     # ROIs kept after non-maximum suppression (training and inference)
-    POST_NMS_ROIS_TRAINING = 2000
-    #POST_NMS_ROIS_TRAINING = 6000
-    POST_NMS_ROIS_INFERENCE = 1000
-    #POST_NMS_ROIS_INFERENCE = 8000
+    #POST_NMS_ROIS_TRAINING = 2000
+    POST_NMS_ROIS_TRAINING = 6000
+    #POST_NMS_ROIS_INFERENCE = 1000
+    POST_NMS_ROIS_INFERENCE = 8000
 
     # If enabled, resizes instance masks to a smaller size to reduce
     # memory load. Recommended when using high-resolution images.
