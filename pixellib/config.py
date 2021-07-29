@@ -48,10 +48,12 @@ class Config(object):
     BACKBONE_STRIDES = [4, 8, 16, 32, 64]
 
     # Size of the fully-connected layers in the classification graph
-    FPN_CLASSIF_FC_LAYERS_SIZE = 1024
+    #FPN_CLASSIF_FC_LAYERS_SIZE = 1024
+    FPN_CLASSIF_FC_LAYERS_SIZE = 2048
 
     # Size of the top-down layers used to build the feature pyramid
-    TOP_DOWN_PYRAMID_SIZE = 256
+    #TOP_DOWN_PYRAMID_SIZE = 256
+    TOP_DOWN_PYRAMID_SIZE = 512
 
 
     # Length of square anchor side in pixels
@@ -124,7 +126,7 @@ class Config(object):
 
     # Maximum number of ground truth instances to use in one image
     #MAX_GT_INSTANCES = 100
-    MAX_GT_INSTANCES = 300
+    MAX_GT_INSTANCES = 600
 
     # Bounding box refinement standard deviation for RPN and final detections.
     RPN_BBOX_STD_DEV = np.array([0.1, 0.1, 0.2, 0.2])
