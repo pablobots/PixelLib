@@ -135,7 +135,6 @@ class instance_custom_training:
                         iaa.SaltAndPepper(0.1),
                         iaa.Invert(0.25, per_channel=0.5),
                         iaa.Solarize(0.5, threshold=(32, 128)),
-                        iaa.AdditivePoissonNoise(scale=(0, 40)),
                         iaa.Add((-40, 40)),
                         iaa.Multiply((0.5, 1.5), per_channel=0.5)
                     ])
