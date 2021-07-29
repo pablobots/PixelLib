@@ -108,38 +108,38 @@ class instance_custom_training:
 
         else:
             if augmentation == True:
-                augmentation = iaa.Sometimes(0.5, [
-			        iaa.Fliplr(0.5),
-			        #iaa.Flipud(0.5),
-			        iaa.GaussianBlur(sigma=(0.0, 5.0)),
-                    iaa.MultiplyAndAddToBrightness(mul=(0.5, 1.5), add=(-40, 40)),
-                    iaa.Cutout(nb_iterations=(20, 40), size=0.05, squared=False, fill_mode="gaussian", fill_per_channel=True),
-                    iaa.OneOf([
-                        #iaa.Affine(rotate=(-45, 45)),
-                        #iaa.Affine(scale={"x": (0.5, 1.5), "y": (0.5, 1.5)}),
-                        #iaa.AddElementwise((-40, 40)),
-                        #iaa.AdditiveGaussianNoise(scale=(0, 0.2*255)),
-                        ##iaa.GammaContrast((0.5, 2.0)),
-                        #iaa.Cutout(nb_iterations=(1, 3), size=0.2, squared=False),
-                        #iaa.CoarseDropout((0.0, 0.05), size_percent=(0.02, 0.25)),
-                        #iaa.JpegCompression(compression=(70, 99)),
-                        #iaa.SigmoidContrast(gain=(3, 10), cutoff=(0.4, 0.6)),
-                        #iaa.AllChannelsCLAHE(clip_limit=(1, 10)),
-                        #iaa.WithBrightnessChannels(iaa.Add((-50, 50)), to_colorspace=[iaa.CSPACE_Lab, iaa.CSPACE_HSV]),
-                        #iaa.RemoveSaturation(1.0),
-                        #iaa.Grayscale(alpha=(0.0, 1.0)),
-                        #iaa.BlendAlphaElementwise([0.25, 0.75], iaa.MedianBlur(13)),
-                        #iaa.BlendAlphaSimplexNoise(iaa.EdgeDetect(1.0)),
-                        #iaa.Canny(alpha=(0.0, 0.5)),
-                        #iaa.Alpha((0.0, 1.0),iaa.Canny(alpha=1),iaa.MedianBlur(13)),
-                        iaa.SaltAndPepper(0.1),
-                        iaa.Invert(0.25, per_channel=0.5),
-                        iaa.Solarize(0.5, threshold=(32, 128)),
-                        iaa.Add((-40, 40)),
-                        iaa.Multiply((0.5, 1.5), per_channel=0.5)
-                    ])
-			        ])
-                print("Applying Default Augmentation on Dataset")
+                augmentation = iaa.Sometimes(0.6, [
+                                    iaa.Fliplr(0.5),
+                                    iaa.Flipud(0.5),
+                                    iaa.GaussianBlur(sigma=(0.0, 5.0)),
+                                    iaa.MultiplyAndAddToBrightness(mul=(0.1, 2.0), add=(-20, 20)),
+                                    iaa.Cutout(nb_iterations=(50, 100), size=0.05, squared=False,
+                                               fill_mode="gaussian", fill_per_channel=True),
+                                    iaa.Affine(scale={"x": (0.5, 2.0), "y": (0.5, 2.0)}),
+                                    iaa.OneOf([
+                                        iaa.Affine(rotate=(-45, 45)),
+                                        iaa.GammaContrast((0.5, 2.0)),
+                                        iaa.Solarize(0.5, threshold=(32, 128)),
+                                        iaa.Add((-40, 40)),
+                                        iaa.Multiply((0.5, 1.5), per_channel=0.5)
+                                        #iaa.AddElementwise((-40, 40)),
+                                        #iaa.AdditiveGaussianNoise(scale=(0, 0.2*255)),
+                                        #iaa.Cutout(nb_iterations=(1, 3), size=0.2, squared=False),
+                                        #iaa.CoarseDropout((0.0, 0.05), size_percent=(0.02, 0.25)),
+                                        #iaa.JpegCompression(compression=(70, 99)),
+                                        #iaa.SigmoidContrast(gain=(3, 10), cutoff=(0.4, 0.6)),
+                                        #iaa.AllChannelsCLAHE(clip_limit=(1, 10)),
+                                        #iaa.WithBrightnessChannels(iaa.Add((-50, 50)), to_colorspace=[iaa.CSPACE_Lab, iaa.CSPACE_HSV]),
+                                        #iaa.RemoveSaturation(1.0),
+                                        #iaa.Grayscale(alpha=(0.0, 1.0)),
+                                        #iaa.BlendAlphaElementwise([0.25, 0.75], iaa.MedianBlur(13)),
+                                        #iaa.BlendAlphaSimplexNoise(iaa.EdgeDetect(1.0)),
+                                        #iaa.Canny(alpha=(0.0, 0.5)),
+                                        #aa.SaltAndPepper(0.1),
+                                        #iaa.Invert(0.25, per_channel=0.5),
+                                    ])
+                                    ])
+                print("Applying Augmentation on Dataset")
 
             else:
                 augmentation = augmentation
