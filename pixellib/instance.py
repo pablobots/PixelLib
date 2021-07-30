@@ -1178,10 +1178,10 @@ def random_colors(N, bright=True):
     #colors = list(map(lambda c: colorsys.hsv_to_rgb(*c), hsv))
     #random.shuffle(colors)
     #return colors
-    return [(0.0, 0.5, 0.0)] * N
+    return [(0.0, 1.0, 0.0)] * N
 
 
-def apply_mask(image, mask, color, alpha=0.5):
+def apply_mask(image, mask, color, alpha=1.0):
     """Apply the given mask to the image.
     """
     for c in range(3):
