@@ -1181,7 +1181,7 @@ def random_colors(N, bright=True):
     return [(0.0, 1.0, 0.0)] * N
 
 
-def apply_mask(image, mask, color, alpha=1.0):
+def apply_mask(image, mask, color, alpha=0.5):
     """Apply the given mask to the image.
     """
     for c in range(3):
